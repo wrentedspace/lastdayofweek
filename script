@@ -1,0 +1,41 @@
+SELECT
+-- DAYOFWEEK(CURDATE()), -- in case you need to check what today's day of week is for reference
+    DATE_SUB((CURDATE()), -- subtract from the current date
+		INTERVAL (IF(DAYOFWEEK(CURDATE()) < 2, -- an interval depending on if today's day of week is less than 2
+        (5 + DAYOFWEEK(CURDATE())), -- and if it is 1(Sun), subtract 5+1 (6) to find last Monday
+        DAYOFWEEK(CURDATE())-2)) DAY) -- if today's day of week is not 1, meaning it's already Monday, subtract dayofweek-2 days (eg today is 7(Sat), subtract 7-2 (5) days) to find last Monday
+	AS LastMonday,
+    
+	DATE_SUB((CURDATE()), -- subtract from the current date
+		INTERVAL (IF(DAYOFWEEK(CURDATE()) < 3, -- an interval depending on if today's day of week is less than 3
+        (4 + DAYOFWEEK(CURDATE())), -- and if it is 1(Sun) or 2(Mon), subtract 4+1 (5) or 4+2 (6) to find last Tuesday
+        DAYOFWEEK(CURDATE())-3)) DAY) -- if today's day of week is not 1 or 2, meaning it's already Tuesday, subtract dayofweek-3 days (eg today is 7(Sat), subtract 7-3 (4) days to find last Tuesday
+	AS LastTuesday,
+    
+	DATE_SUB((CURDATE()), -- subtract from the current date
+		INTERVAL (IF(DAYOFWEEK(CURDATE()) < 4, -- an interval depending on if today's day of week is less than 4
+        (3 + DAYOFWEEK(CURDATE())),
+        DAYOFWEEK(CURDATE())-4)) DAY)
+	AS LastWednesday,
+    
+	DATE_SUB((CURDATE()), -- subtract from the current date
+		INTERVAL (IF(DAYOFWEEK(CURDATE()) < 5, -- an interval depending on if today's day of week is less than 5
+        (2 + DAYOFWEEK(CURDATE())),
+        DAYOFWEEK(CURDATE())-5)) DAY) 
+	AS LastThursday,
+    
+	DATE_SUB((CURDATE()), -- subtract from the current date
+		INTERVAL (IF(DAYOFWEEK(CURDATE()) < 6, -- an interval depending on if today's day of week is less than 6
+        (1 + DAYOFWEEK(CURDATE())), 
+        DAYOFWEEK(CURDATE())-6)) DAY)
+	AS LastFriday,
+    
+	DATE_SUB((CURDATE()), -- subtract from the current date
+		INTERVAL (DAYOFWEEK(CURDATE())) DAY) -- an interval equal to the numeric dayofweek of the current date
+	AS LastSaturday,
+    
+	DATE_SUB((CURDATE()), -- subtract from the current date
+		INTERVAL (IF(DAYOFWEEK(CURDATE()) = 1, -- an interval depending on if today is Sunday (day 1)
+        7, -- if it's Sunday, subtract 7
+        DAYOFWEEK(CURDATE())-1)) DAY) -- if it's not Sunday, subtract (numeric dayofweek minus 1) days
+	AS LastSunday
